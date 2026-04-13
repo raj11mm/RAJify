@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register | RAJify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/theme.js}" defer></script>
+</head>
+<body>
+<main class="container auth-page">
+    <div class="detail-topbar">
+        <a th:href="@{/}" class="back-link">← Back to store</a>
+        <button type="button" id="themeToggle" class="theme-toggle dark-chip" aria-label="Toggle dark mode">
+            <span class="theme-icon">moon</span>
+            <span class="theme-label">Dark</span>
+        </button>
+    </div>
+    <h1>Welcome to RAJify</h1>
+    <p class="muted">Login to checkout or create a new account.</p>
+    <p class="flash error" th:if="${authError}" th:text="${authError}"></p>
+    <p class="flash success" th:if="${authSuccess}" th:text="${authSuccess}"></p>
+    <section class="auth-grid">
+        <article class="auth-card">
+            <h2>Login</h2>
+            <form th:action="@{/auth/login}" method="post" class="auth-form">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </article>
+        <article class="auth-card">
+            <h2>Create Account</h2>
+            <form th:action="@{/auth/register}" method="post" class="auth-form">
+                <input type="text" name="fullName" placeholder="Full Name" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Register</button>
+            </form>
+        </article>
+    </section>
+</main>
+</body>
+</html>

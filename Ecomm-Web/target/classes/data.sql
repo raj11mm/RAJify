@@ -1,0 +1,9 @@
+INSERT INTO products (name, category, image_url, description, price, rating) VALUES
+('Men''s Slim Fit Denim Jacket', 'Men', 'https://images.unsplash.com/photo-1592878904946-b3cd9b9f6f90?auto=format&fit=crop&w=800&q=80', 'Layer-ready stretch denim jacket with a clean modern fit.', 59.99, 4.6),
+('Men''s Classic Cotton Shirt', 'Men', 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?auto=format&fit=crop&w=800&q=80', 'Breathable everyday shirt tailored for office and casual wear.', 34.99, 4.5),
+('Men''s Athleisure Joggers', 'Men', 'https://images.unsplash.com/photo-1506629905607-d405b7a99b5a?auto=format&fit=crop&w=800&q=80', 'Soft, tapered joggers with zip pockets and all-day comfort.', 42.50, 4.7),
+('Women''s Floral Midi Dress', 'Women', 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=800&q=80', 'Flowy silhouette with lightweight fabric and elegant floral print.', 64.00, 4.8),
+('Women''s Ribbed Knit Top', 'Women', 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=800&q=80', 'Stretchy rib-knit top perfect for layering or standalone styling.', 27.99, 4.4),
+('Women''s Wide-Leg Trousers', 'Women', 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80', 'High-rise wide-leg trousers that blend comfort and sophistication.', 49.90, 4.6),
+('Men''s Premium Polo T-Shirt', 'Men', 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&w=800&q=80', 'Smart-casual polo t-shirt crafted with breathable pique cotton.', 29.95, 4.3),
+('Women''s Cropped Blazer', 'Women', 'https://images.unsplash.com/photo-1485230895905-ec40ba36b9bc?auto=format&fit=crop&w=800&q=80', 'Structured cropped blazer for effortless work-to-evening outfits.', 72.00, 4.7);

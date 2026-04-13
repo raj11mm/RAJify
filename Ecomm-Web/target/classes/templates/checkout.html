@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | RAJify</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/theme.js}" defer></script>
+</head>
+<body>
+<main class="container checkout-page">
+    <div class="detail-topbar">
+        <a th:href="@{/}" class="back-link">← Continue shopping</a>
+        <button type="button" id="themeToggle" class="theme-toggle dark-chip" aria-label="Toggle dark mode">
+            <span class="theme-icon">moon</span>
+            <span class="theme-label">Dark</span>
+        </button>
+    </div>
+    <h1>Checkout</h1>
+    <p class="muted">Review your items and confirm your delivery details.</p>
+    <p class="flash error" th:if="${checkoutError}" th:text="${checkoutError}"></p>
+    <section class="checkout-grid">
+        <div class="checkout-items">
+            <article class="cart-item" th:each="item : ${cartItems}">
+                <div>
+                    <h4 th:text="${item.product.name}"></h4>
+                    <p>Qty: <span th:text="${item.quantity}"></span> | $<span th:text="${#numbers.formatDecimal(item.lineTotal, 1, 2)}"></span></p>
+                </div>
+            </article>
+            <div class="cart-total">
+                <span>Total</span>
+                <strong th:text="'$' + ${#numbers.formatDecimal(cartTotal, 1, 2)}"></strong>
+            </div>
+        </div>
+        <aside class="auth-card">
+            <h2>Delivery Address</h2>
+            <p class="muted">Ordering as <strong th:text="${currentUser.fullName}"></strong></p>
+            <form th:action="@{/checkout/place}" method="post" class="auth-form">
+                <textarea name="shippingAddress" placeholder="Enter complete shipping address..." rows="5" required></textarea>
+                <button type="submit">Place Order</button>
+            </form>
+        </aside>
+    </section>
+</main>
+</body>
+</html>

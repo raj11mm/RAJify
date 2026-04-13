@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAJify | Fashion Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script th:src="@{/js/theme.js}" defer></script>
+</head>
+<body>
+<header class="hero">
+    <nav class="navbar container">
+        <a class="logo" th:href="@{/}">RAJify</a>
+        <ul class="nav-links">
+            <li><a th:href="@{/(category='all')}">All</a></li>
+            <li><a th:href="@{/(category='men')}">Men</a></li>
+            <li><a th:href="@{/(category='women')}">Women</a></li>
+            <li><a th:href="@{/checkout}">Checkout</a></li>
+        </ul>
+        <div class="nav-actions">
+            <button type="button" id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-icon">moon</span>
+                <span class="theme-label">Dark</span>
+            </button>
+            <a class="auth-chip" th:if="${currentUser == null}" th:href="@{/auth}">Login/Register</a>
+            <form th:if="${currentUser != null}" th:action="@{/auth/logout}" method="post">
+                <button class="auth-chip" type="submit">Logout</button>
+            </form>
+            <a class="cart-chip" href="#cart">Cart (<span th:text="${cartCount}"></span>)</a>
+        </div>
+    </nav>
+
+    <div class="hero-content container">
+        <div>
+            <p class="badge">Fresh arrivals every week</p>
+            <h1>Style That Fits Your Everyday Story</h1>
+            <p>
+                Explore premium men and women clothing designed for comfort, confidence, and modern trends.
+            </p>
+            <a href="#products" class="primary-link">Browse Products</a>
+        </div>
+    </div>
+</header>
+
+<main class="container" id="products">
+    <section class="filters">
+        <p class="welcome-note" th:if="${currentUser != null}">
+            Signed in as <strong th:text="${currentUser.fullName}"></strong>
+        </p>
+        <form class="filter-form" method="get" th:action="@{/}">
+            <select name="category">
+                <option value="all" th:selected="${selectedCategory == 'all'}">All Categories</option>
+                <option value="men" th:selected="${selectedCategory == 'men'}">Men</option>
+                <option value="women" th:selected="${selectedCategory == 'women'}">Women</option>
+            </select>
+            <input type="text" name="q" placeholder="Search shirts, dresses, jackets..." th:value="${query}">
+            <button type="submit">Apply</button>
+        </form>
+        <p class="flash" th:if="${successMessage}" th:text="${successMessage}"></p>
+    </section>
+
+    <section class="section-header">
+        <h2>Featured Clothing</h2>
+        <p>Curated pieces for men and women that balance quality and contemporary design.</p>
+    </section>
+
+    <section class="layout">
+    <div class="product-grid">
+        <article class="product-card" th:each="product : ${products}">
+            <a th:href="@{/products/{id}(id=${product.id})}">
+                <img class="product-image" th:src="${product.imageUrl}" th:alt="${product.name}">
+            </a>
+            <div class="product-content">
+                <span class="product-category" th:text="${product.category}"></span>
+                <h3 th:text="${product.name}"></h3>
+                <p th:text="${product.description}"></p>
+                <div class="product-footer">
+                    <strong th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2)}"></strong>
+                    <span th:text="'★ ' + ${product.rating}"></span>
+                </div>
+                <div class="product-actions">
+                    <a th:href="@{/products/{id}(id=${product.id})}">View Details</a>
+                    <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <aside class="cart-panel" id="cart">
+        <h3>Your Cart</h3>
+        <p th:if="${#lists.isEmpty(cartItems)}" class="muted">Your cart is empty.</p>
+        <div class="cart-list" th:if="${!#lists.isEmpty(cartItems)}">
+            <article class="cart-item" th:each="item : ${cartItems}">
+                <div>
+                    <h4 th:text="${item.product.name}"></h4>
+                    <p>
+                        Qty: <span th:text="${item.quantity}"></span>
+                        | $<span th:text="${#numbers.formatDecimal(item.lineTotal, 1, 2)}"></span>
+                    </p>
+                </div>
+                <form th:action="@{/cart/remove/{id}(id=${item.product.id})}" method="post">
+                    <button type="submit">Remove</button>
+                </form>
+            </article>
+        </div>
+        <div class="cart-total">
+            <span>Total</span>
+            <strong th:text="'$' + ${#numbers.formatDecimal(cartTotal, 1, 2)}"></strong>
+        </div>
+        <a class="checkout-link" th:href="@{/checkout}" th:if="${!#lists.isEmpty(cartItems)}">Proceed to Checkout</a>
+    </aside>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>Copyright © 2026 RAJify. All rights reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
