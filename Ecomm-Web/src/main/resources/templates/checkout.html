@@ -13,14 +13,17 @@
 <body>
 <main class="container checkout-page">
     <div class="detail-topbar">
-        <a th:href="@{/}" class="back-link">← Continue shopping</a>
+        <a th:href="@{/}" class="back-link">&larr; Continue shopping</a>
         <button type="button" id="themeToggle" class="theme-toggle dark-chip" aria-label="Toggle dark mode">
             <span class="theme-icon">moon</span>
             <span class="theme-label">Dark</span>
         </button>
     </div>
-    <h1>Checkout</h1>
-    <p class="muted">Review your items and confirm your delivery details.</p>
+    <section class="checkout-heading">
+        <p class="badge">Secure checkout</p>
+        <h1>Checkout</h1>
+        <p class="muted">Review your items and confirm your delivery details.</p>
+    </section>
     <p class="flash error" th:if="${checkoutError}" th:text="${checkoutError}"></p>
     <section class="checkout-grid">
         <div class="checkout-items">
@@ -35,7 +38,7 @@
                 <strong th:text="'$' + ${#numbers.formatDecimal(cartTotal, 1, 2)}"></strong>
             </div>
         </div>
-        <aside class="auth-card">
+        <aside class="auth-card checkout-card">
             <h2>Delivery Address</h2>
             <p class="muted">Ordering as <strong th:text="${currentUser.fullName}"></strong></p>
             <form th:action="@{/checkout/place}" method="post" class="auth-form">

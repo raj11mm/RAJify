@@ -13,7 +13,7 @@
 <body>
 <main class="container detail-page">
     <div class="detail-topbar">
-        <a th:href="@{/}" class="back-link">← Back to products</a>
+        <a th:href="@{/}" class="back-link">&larr; Back to products</a>
         <div class="nav-actions">
             <button type="button" id="themeToggle" class="theme-toggle dark-chip" aria-label="Toggle dark mode">
                 <span class="theme-icon">moon</span>
@@ -30,11 +30,16 @@
             <h1 th:text="${product.name}"></h1>
             <p class="detail-description" th:text="${product.description}"></p>
             <p class="detail-price" th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2)}"></p>
-            <p class="detail-rating" th:text="'Rating: ★ ' + ${product.rating}"></p>
+            <p class="detail-rating" th:text="'Rating: Star ' + ${product.rating}"></p>
             <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
-                <button class="detail-btn" type="submit">Add to Cart</button>
+                <button class="detail-btn add-cart-btn" type="submit">Add to Cart</button>
             </form>
             <p class="cart-hint">Items in cart: <strong th:text="${cartCount}"></strong></p>
+            <div class="detail-perks">
+                <span>Easy 7-day returns</span>
+                <span>Secure checkout</span>
+                <span>Quality checked</span>
+            </div>
         </div>
     </section>
 </main>

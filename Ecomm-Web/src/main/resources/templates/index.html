@@ -34,13 +34,28 @@
     </nav>
 
     <div class="hero-content container">
-        <div>
+        <div class="hero-copy">
             <p class="badge">Fresh arrivals every week</p>
             <h1>Style That Fits Your Everyday Story</h1>
             <p>
                 Explore premium men and women clothing designed for comfort, confidence, and modern trends.
             </p>
-            <a href="#products" class="primary-link">Browse Products</a>
+            <div class="hero-actions">
+                <a href="#products" class="primary-link">Browse Products</a>
+                <a th:href="@{/(category='women')}" class="secondary-link">Explore Women</a>
+            </div>
+            <div class="trust-strip" aria-label="Store highlights">
+                <span>20 curated styles</span>
+                <span>Free returns</span>
+                <span>Fast checkout</span>
+            </div>
+        </div>
+        <div class="hero-showcase" aria-label="Featured RAJify collection">
+            <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=900&q=80" alt="RAJify featured fashion collection">
+            <div class="showcase-card">
+                <span>Trending now</span>
+                <strong>Layer-ready outfits</strong>
+            </div>
         </div>
     </div>
 </header>
@@ -62,64 +77,86 @@
         <p class="flash" th:if="${successMessage}" th:text="${successMessage}"></p>
     </section>
 
-    <section class="section-header">
-        <h2>Featured Clothing</h2>
-        <p>Curated pieces for men and women that balance quality and contemporary design.</p>
+    <section class="section-header catalog-header">
+        <div>
+            <h2>Featured Clothing</h2>
+            <p>Curated pieces for men and women that balance quality and contemporary design.</p>
+        </div>
+        <div class="catalog-tools" aria-label="Catalog tools">
+            <label>
+                Sort
+                <select id="sortProducts">
+                    <option value="featured">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="rating-high">Top Rated</option>
+                </select>
+            </label>
+            <div class="view-toggle" aria-label="View style">
+                <button type="button" class="is-active" data-view="grid" aria-pressed="true">Grid</button>
+                <button type="button" data-view="compact" aria-pressed="false">Compact</button>
+            </div>
+        </div>
     </section>
 
     <section class="layout">
-    <div class="product-grid">
-        <article class="product-card" th:each="product : ${products}">
-            <a th:href="@{/products/{id}(id=${product.id})}">
-                <img class="product-image" th:src="${product.imageUrl}" th:alt="${product.name}">
-            </a>
-            <div class="product-content">
-                <span class="product-category" th:text="${product.category}"></span>
-                <h3 th:text="${product.name}"></h3>
-                <p th:text="${product.description}"></p>
-                <div class="product-footer">
-                    <strong th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2)}"></strong>
-                    <span th:text="'★ ' + ${product.rating}"></span>
+        <div class="product-grid" id="productGrid">
+            <article class="product-card"
+                     th:each="product : ${products}"
+                     th:attr="data-price=${product.price},data-rating=${product.rating},data-name=${product.name}">
+                <a th:href="@{/products/{id}(id=${product.id})}">
+                    <img class="product-image" th:src="${product.imageUrl}" th:alt="${product.name}">
+                </a>
+                <div class="product-content">
+                    <div class="product-meta">
+                        <span class="product-category" th:text="${product.category}"></span>
+                        <span class="rating-pill" th:text="'Star ' + ${product.rating}"></span>
+                    </div>
+                    <h3 th:text="${product.name}"></h3>
+                    <p th:text="${product.description}"></p>
+                    <div class="product-footer">
+                        <strong th:text="'$' + ${#numbers.formatDecimal(product.price, 1, 2)}"></strong>
+                        <span>In stock</span>
+                    </div>
+                    <div class="product-actions">
+                        <a th:href="@{/products/{id}(id=${product.id})}">View Details</a>
+                        <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                            <button type="submit" class="add-cart-btn">Add to Cart</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="product-actions">
-                    <a th:href="@{/products/{id}(id=${product.id})}">View Details</a>
-                    <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
-                        <button type="submit">Add to Cart</button>
-                    </form>
-                </div>
-            </div>
-        </article>
-    </div>
-
-    <aside class="cart-panel" id="cart">
-        <h3>Your Cart</h3>
-        <p th:if="${#lists.isEmpty(cartItems)}" class="muted">Your cart is empty.</p>
-        <div class="cart-list" th:if="${!#lists.isEmpty(cartItems)}">
-            <article class="cart-item" th:each="item : ${cartItems}">
-                <div>
-                    <h4 th:text="${item.product.name}"></h4>
-                    <p>
-                        Qty: <span th:text="${item.quantity}"></span>
-                        | $<span th:text="${#numbers.formatDecimal(item.lineTotal, 1, 2)}"></span>
-                    </p>
-                </div>
-                <form th:action="@{/cart/remove/{id}(id=${item.product.id})}" method="post">
-                    <button type="submit">Remove</button>
-                </form>
             </article>
         </div>
-        <div class="cart-total">
-            <span>Total</span>
-            <strong th:text="'$' + ${#numbers.formatDecimal(cartTotal, 1, 2)}"></strong>
-        </div>
-        <a class="checkout-link" th:href="@{/checkout}" th:if="${!#lists.isEmpty(cartItems)}">Proceed to Checkout</a>
-    </aside>
+
+        <aside class="cart-panel" id="cart">
+            <h3>Your Cart</h3>
+            <p th:if="${#lists.isEmpty(cartItems)}" class="muted">Your cart is empty.</p>
+            <div class="cart-list" th:if="${!#lists.isEmpty(cartItems)}">
+                <article class="cart-item" th:each="item : ${cartItems}">
+                    <div>
+                        <h4 th:text="${item.product.name}"></h4>
+                        <p>
+                            Qty: <span th:text="${item.quantity}"></span>
+                            | $<span th:text="${#numbers.formatDecimal(item.lineTotal, 1, 2)}"></span>
+                        </p>
+                    </div>
+                    <form th:action="@{/cart/remove/{id}(id=${item.product.id})}" method="post">
+                        <button type="submit">Remove</button>
+                    </form>
+                </article>
+            </div>
+            <div class="cart-total">
+                <span>Total</span>
+                <strong th:text="'$' + ${#numbers.formatDecimal(cartTotal, 1, 2)}"></strong>
+            </div>
+            <a class="checkout-link" th:href="@{/checkout}" th:if="${!#lists.isEmpty(cartItems)}">Proceed to Checkout</a>
+        </aside>
     </section>
 </main>
 
 <footer class="footer">
     <div class="container">
-        <p>Copyright © 2026 RAJify. All rights reserved.</p>
+        <p>Copyright &copy; 2026 RAJify. All rights reserved.</p>
     </div>
 </footer>
 </body>
